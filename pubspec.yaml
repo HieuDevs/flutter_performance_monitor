@@ -1,0 +1,28 @@
+# pubspec.yaml (root)
+name: flutter_performance_monitor
+description: A comprehensive performance monitoring library for Flutter applications. Track FPS, memory, CPU usage and more in real-time.
+version: 1.0.0
+homepage: https://github.com/hieudevs/flutter_performance_monitor
+repository: https://github.com/hieudevs/flutter_performance_monitor
+issue_tracker: https://github.com/hieudevs/flutter_performance_monitor/issues
+documentation: https://github.com/hieudevs/flutter_performance_monitor#readme
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+  flutter: ">=3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # System information
+  system_info2: ^4.0.0
+  
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+
+flutter:
+  uses-material-design: true
