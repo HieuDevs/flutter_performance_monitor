@@ -58,7 +58,7 @@ class ExampleHomePage extends StatelessWidget {
             Icon(
               Icons.speed,
               size: 80,
-              color: Theme.of(context).primaryColor.withOpacity(0.7),
+              color: Theme.of(context).primaryColor.withValues(alpha: 0.7),
             ),
             const SizedBox(height: 24),
             Text(

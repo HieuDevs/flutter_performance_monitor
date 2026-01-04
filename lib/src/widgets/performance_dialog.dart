@@ -125,11 +125,14 @@ class PerformanceDialog extends StatelessWidget {
               const SizedBox(height: 12),
               _buildStatRow('Total Frames', '${metrics.frameCount}'),
               if (metrics.minFps != null)
-                _buildStatRow('Minimum FPS', metrics.minFps!.toStringAsFixed(1)),
+                _buildStatRow(
+                    'Minimum FPS', metrics.minFps!.toStringAsFixed(1)),
               if (metrics.maxFps != null)
-                _buildStatRow('Maximum FPS', metrics.maxFps!.toStringAsFixed(1)),
+                _buildStatRow(
+                    'Maximum FPS', metrics.maxFps!.toStringAsFixed(1)),
               if (metrics.avgFps != null)
-                _buildStatRow('Average FPS', metrics.avgFps!.toStringAsFixed(1)),
+                _buildStatRow(
+                    'Average FPS', metrics.avgFps!.toStringAsFixed(1)),
               if (duration != null)
                 _buildStatRow(
                   'Tracking Duration',

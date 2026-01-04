@@ -22,7 +22,9 @@ class MemoryProfiler {
 
   /// Start monitoring memory usage
   void startMonitoring({Duration interval = const Duration(seconds: 1)}) {
-    if (_isMonitoring) return;
+    if (_isMonitoring) {
+      return;
+    }
 
     _isMonitoring = true;
     _timer = Timer.periodic(interval, (_) => _checkMemory());
@@ -36,7 +38,9 @@ class MemoryProfiler {
   }
 
   void _checkMemory() {
-    if (!_isMonitoring) return;
+    if (!_isMonitoring) {
+      return;
+    }
 
     final memoryMB = getCurrentMemoryUsage();
     _memoryController.add(memoryMB);
@@ -53,7 +57,9 @@ class MemoryProfiler {
     try {
       // Method 1: Platform-specific memory info (when implemented)
       final platformMemory = _getPlatformMemoryUsage();
-      if (platformMemory > 0) return platformMemory;
+      if (platformMemory > 0) {
+        return platformMemory;
+      }
 
       // Method 2: Fallback estimate based on platform
       return _getEstimatedMemoryUsage();
@@ -97,7 +103,9 @@ class MemoryProfiler {
     try {
       // Try external memory_info library first
       final externalMemory = _getExternalMemoryUsage();
-      if (externalMemory > 0) return externalMemory;
+      if (externalMemory > 0) {
+        return externalMemory;
+      }
 
       // Fallback to platform-specific implementations
       if (Platform.isAndroid) {

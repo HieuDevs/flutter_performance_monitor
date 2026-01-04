@@ -62,8 +62,12 @@ class PerformanceHelpers {
 
   /// Format bytes to readable string
   static String formatBytes(int bytes) {
-    if (bytes < 0) return '0 B';
-    if (bytes < 1024) return '$bytes B';
+    if (bytes < 0) {
+      return '0 B';
+    }
+    if (bytes < 1024) {
+      return '$bytes B';
+    }
     if (bytes < 1024 * 1024) {
       return '${(bytes / 1024).toStringAsFixed(1)} KB';
     }
@@ -116,7 +120,9 @@ class PerformanceHelpers {
 
   /// Calculate average from list
   static double calculateAverage(List<double> values) {
-    if (values.isEmpty) return 0.0;
+    if (values.isEmpty) {
+      return 0.0;
+    }
     return values.reduce((a, b) => a + b) / values.length;
   }
 

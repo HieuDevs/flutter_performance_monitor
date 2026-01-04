@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+
 import '../core/performance_tracker.dart';
 import '../models/performance_metrics.dart';
 import '../utils/constants.dart';
 import '../utils/helpers.dart';
-import 'performance_dialog.dart';
 import 'performance_chart.dart';
+import 'performance_dialog.dart';
 
 /// Position of the performance overlay
 enum PerformanceOverlayPosition {
@@ -64,10 +65,12 @@ class _PerformanceOverlayState extends State<PerformanceOverlay> {
   final PerformanceTracker _tracker = PerformanceTracker();
   PerformanceMetrics? _currentMetrics;
   bool _isExpanded = false;
+  Offset _position = Offset.zero;
 
   @override
   void initState() {
     super.initState();
+    _initializePosition();
     if (widget.enabled) {
       _tracker.startTracking(updateInterval: widget.updateInterval);
       _tracker.metricsStream.listen((metrics) {
@@ -98,6 +101,58 @@ class _PerformanceOverlayState extends State<PerformanceOverlay> {
     super.dispose();
   }
 
+  void _initializePosition() {
+    // Initialize position based on the position enum
+    // We'll use a post-frame callback to get the screen size
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) {
+        return;
+      }
+      final screenSize = MediaQuery.of(context).size;
+      const overlaySize = Size(120, 80); // Approximate initial size
+
+      double left, top;
+      switch (widget.position) {
+        case PerformanceOverlayPosition.topLeft:
+          left = 16;
+          top = 40;
+          break;
+        case PerformanceOverlayPosition.topRight:
+          left = screenSize.width - overlaySize.width - 16;
+          top = 40;
+          break;
+        case PerformanceOverlayPosition.bottomLeft:
+          left = 16;
+          top = screenSize.height - overlaySize.height - 40;
+          break;
+        case PerformanceOverlayPosition.bottomRight:
+          left = screenSize.width - overlaySize.width - 16;
+          top = screenSize.height - overlaySize.height - 40;
+          break;
+      }
+
+      setState(() {
+        _position = Offset(left, top);
+      });
+    });
+  }
+
+  void _onPanUpdate(DragUpdateDetails details) {
+    setState(() {
+      _position += details.delta;
+
+      // Apply screen constraints
+      final screenSize = MediaQuery.of(context).size;
+      const overlaySize = Size(120, 80); // Approximate size
+
+      // Constrain to screen bounds with some padding
+      _position = Offset(
+        _position.dx.clamp(0.0, screenSize.width - overlaySize.width),
+        _position.dy.clamp(0.0, screenSize.height - overlaySize.height),
+      );
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -105,12 +160,11 @@ class _PerformanceOverlayState extends State<PerformanceOverlay> {
         widget.child,
         if (widget.enabled && _currentMetrics != null)
           Positioned(
-            top: _getTop(),
-            right: _getRight(),
-            bottom: _getBottom(),
-            left: _getLeft(),
+            top: _position.dy,
+            left: _position.dx,
             child: SafeArea(
               child: GestureDetector(
+                onPanUpdate: _onPanUpdate,
                 onTap: _toggleExpanded,
                 onDoubleTap: _showChartDialog,
                 onLongPress: _showDetailDialog,
@@ -298,45 +352,5 @@ class _PerformanceOverlayState extends State<PerformanceOverlay> {
         ),
       ],
     );
-  }
-
-  double? _getTop() {
-    switch (widget.position) {
-      case PerformanceOverlayPosition.topLeft:
-      case PerformanceOverlayPosition.topRight:
-        return 40;
-      default:
-        return null;
-    }
-  }
-
-  double? _getRight() {
-    switch (widget.position) {
-      case PerformanceOverlayPosition.topRight:
-      case PerformanceOverlayPosition.bottomRight:
-        return 16;
-      default:
-        return null;
-    }
-  }
-
-  double? _getBottom() {
-    switch (widget.position) {
-      case PerformanceOverlayPosition.bottomLeft:
-      case PerformanceOverlayPosition.bottomRight:
-        return 40;
-      default:
-        return null;
-    }
-  }
-
-  double? _getLeft() {
-    switch (widget.position) {
-      case PerformanceOverlayPosition.topLeft:
-      case PerformanceOverlayPosition.bottomLeft:
-        return 16;
-      default:
-        return null;
-    }
   }
 }
