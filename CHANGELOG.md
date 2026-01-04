@@ -63,4 +63,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
-For more information, visit [GitHub Repository](https://github.com/yourusername/flutter_performance_monitor)
+For more information, visit [GitHub Repository](https://github.com/yourusername/flutter_pef_monit)

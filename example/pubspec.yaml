@@ -1,5 +1,5 @@
-name: flutter_performance_monitor_example
-description: Example app demonstrating flutter_performance_monitor package
+name: flutter_pef_monit_example
+description: Example app demonstrating flutter_pef_monit package
 publish_to: 'none'
 
 version: 1.0.0+1
@@ -12,7 +12,7 @@ dependencies:
     sdk: flutter
 
   # Local package reference
-  flutter_performance_monitor:
+  flutter_pef_monit:
     path: ../
 
   cupertino_icons: ^1.0.2

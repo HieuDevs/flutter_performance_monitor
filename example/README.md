@@ -1,6 +1,6 @@
 # Flutter Performance Monitor Example
 
-This comprehensive example app demonstrates all features of the `flutter_performance_monitor` package with interactive performance testing scenarios.
+This comprehensive example app demonstrates all features of the `flutter_pef_monit` package with interactive performance testing scenarios.
 
 ## Features Demonstrated
 
@@ -94,7 +94,7 @@ The app includes a comprehensive control panel with:
 ### Complete App Integration
 ```dart
 import 'package:flutter/material.dart';
-import 'package:flutter_performance_monitor/flutter_performance_monitor.dart';
+import 'package:flutter_pef_monit/flutter_pef_monit.dart';
 
 void main() {
   runApp(

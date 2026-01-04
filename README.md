@@ -1,6 +1,6 @@
 # Flutter Performance Monitor 📊
 
-[![pub package](https://img.shields.io/pub/v/flutter_performance_monitor.svg)](https://pub.dev/packages/flutter_performance_monitor)
+[![pub package](https://img.shields.io/pub/v/flutter_pef_monit.svg)](https://pub.dev/packages/flutter_pef_monit)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 A comprehensive performance monitoring library for Flutter applications. Track FPS, frame time, memory usage, and CPU in real-time with beautiful overlays and charts.
@@ -33,7 +33,7 @@ A comprehensive performance monitoring library for Flutter applications. Track F
 Add this to your package's `pubspec.yaml` file:
 ```yaml
 dependencies:
-  flutter_performance_monitor: ^1.0.0
+  flutter_pef_monit: ^1.0.0
 ```
 
 Then run:
@@ -45,7 +45,7 @@ flutter pub get
 
 Wrap your app with `PerformanceOverlay`:
 ```dart
-import 'package:flutter_performance_monitor/flutter_performance_monitor.dart';
+import 'package:flutter_pef_monit/flutter_pef_monit.dart';
 
 void main() {
   runApp(
@@ -325,8 +325,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 📞 Support
 
-- 🐛 [Report bugs](https://github.com/yourusername/flutter_performance_monitor/issues)
-- 💬 [Ask questions](https://github.com/yourusername/flutter_performance_monitor/discussions)
+- 🐛 [Report bugs](https://github.com/yourusername/flutter_pef_monit/issues)
+- 💬 [Ask questions](https://github.com/yourusername/flutter_pef_monit/discussions)
 - 📧 Email: your.email@example.com
 
 ## 🌟 Show Your Support

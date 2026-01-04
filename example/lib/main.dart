@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_performance_monitor/flutter_performance_monitor.dart' as perf;
+import 'package:flutter_pef_monit/flutter_pef_monit.dart' as perf;
 
 void main() {
   runApp(const MyApp());

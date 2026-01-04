@@ -1,4 +1,4 @@
-import 'package:flutter_performance_monitor/flutter_performance_monitor.dart';
+import 'package:flutter_pef_monit/flutter_pef_monit.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
@@ -55,9 +55,7 @@ void main() {
       expect(metrics.fps, greaterThanOrEqualTo(0));
       expect(metrics.frameTime, greaterThanOrEqualTo(0));
       expect(metrics.frameCount, greaterThanOrEqualTo(0));
-    },
-        skip:
-            'Skipping due to binding initialization issues in test environment');
+    }, skip: 'Skipping due to binding initialization issues in test environment');
 
     test('should return empty FPS history initially', () {
       final history = tracker.getFPSHistory();
@@ -78,9 +76,7 @@ void main() {
       final duration = tracker.getTrackingDuration();
       expect(duration, isNotNull);
       expect(duration!.inMilliseconds, greaterThan(0));
-    },
-        skip:
-            'Skipping due to binding initialization issues in test environment');
+    }, skip: 'Skipping due to binding initialization issues in test environment');
 
     test('should reset statistics', () async {
       tracker.startTracking();
@@ -95,9 +91,7 @@ void main() {
 
       final history = tracker.getFPSHistory();
       expect(history, isEmpty);
-    },
-        skip:
-            'Skipping due to binding initialization issues in test environment');
+    }, skip: 'Skipping due to binding initialization issues in test environment');
   });
 
   group('PerformanceMetrics Tests', () {

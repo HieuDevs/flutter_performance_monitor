@@ -1,4 +1,4 @@
-import 'package:flutter_performance_monitor/flutter_performance_monitor.dart';
+import 'package:flutter_pef_monit/flutter_pef_monit.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
@@ -61,8 +61,7 @@ void main() {
         timestamp: now,
       );
 
-      expect(
-          metrics.timestamp.millisecondsSinceEpoch, now.millisecondsSinceEpoch);
+      expect(metrics.timestamp.millisecondsSinceEpoch, now.millisecondsSinceEpoch);
     });
 
     test('copyWith should preserve null values', () {

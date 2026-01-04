@@ -1,11 +1,11 @@
 # pubspec.yaml (root)
-name: flutter_performance_monitor
+name: flutter_pef_monit
 description: A comprehensive performance monitoring library for Flutter applications. Track FPS, memory, CPU usage and more in real-time.
 version: 1.0.0
-homepage: https://github.com/hieudevs/flutter_performance_monitor
-repository: https://github.com/hieudevs/flutter_performance_monitor
-issue_tracker: https://github.com/hieudevs/flutter_performance_monitor/issues
-documentation: https://github.com/hieudevs/flutter_performance_monitor#readme
+homepage: https://github.com/hieudevs/flutter_pef_monit
+repository: https://github.com/hieudevs/flutter_pef_monit
+issue_tracker: https://github.com/hieudevs/flutter_pef_monit/issues
+documentation: https://github.com/hieudevs/flutter_pef_monit#readme
 
 environment:
   sdk: '>=3.0.0 <4.0.0'
