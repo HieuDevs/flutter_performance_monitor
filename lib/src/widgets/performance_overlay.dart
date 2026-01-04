@@ -4,6 +4,7 @@ import '../models/performance_metrics.dart';
 import '../utils/constants.dart';
 import '../utils/helpers.dart';
 import 'performance_dialog.dart';
+import 'performance_chart.dart';
 
 /// Position of the performance overlay
 enum PerformanceOverlayPosition {
@@ -111,35 +112,39 @@ class _PerformanceOverlayState extends State<PerformanceOverlay> {
             child: SafeArea(
               child: GestureDetector(
                 onTap: _toggleExpanded,
+                onDoubleTap: _showChartDialog,
                 onLongPress: _showDetailDialog,
                 child: Opacity(
                   opacity: widget.opacity,
-                  child: Container(
-                    constraints: const BoxConstraints(
-                      minWidth: PerformanceConstants.overlayMinWidth,
-                      maxWidth: PerformanceConstants.overlayMaxWidth,
-                    ),
-                    padding: widget.padding,
-                    decoration: BoxDecoration(
-                      color: widget.backgroundColor,
-                      borderRadius: BorderRadius.circular(
-                        PerformanceConstants.overlayBorderRadius,
+                  child: Material(
+                    color: Colors.transparent,
+                    child: Container(
+                      constraints: const BoxConstraints(
+                        minWidth: PerformanceConstants.overlayMinWidth,
+                        maxWidth: PerformanceConstants.overlayMaxWidth,
                       ),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.3),
-                          blurRadius: 8,
-                          offset: const Offset(0, 2),
+                      padding: widget.padding,
+                      decoration: BoxDecoration(
+                        color: widget.backgroundColor,
+                        borderRadius: BorderRadius.circular(
+                          PerformanceConstants.overlayBorderRadius,
                         ),
-                      ],
-                    ),
-                    child: AnimatedCrossFade(
-                      firstChild: _buildCompactView(),
-                      secondChild: _buildDetailedView(),
-                      crossFadeState: (_isExpanded || widget.showDetailed)
-                          ? CrossFadeState.showSecond
-                          : CrossFadeState.showFirst,
-                      duration: PerformanceConstants.expandAnimationDuration,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.3),
+                            blurRadius: 8,
+                            offset: const Offset(0, 2),
+                          ),
+                        ],
+                      ),
+                      child: AnimatedCrossFade(
+                        firstChild: _buildCompactView(),
+                        secondChild: _buildDetailedView(),
+                        crossFadeState: (_isExpanded || widget.showDetailed)
+                            ? CrossFadeState.showSecond
+                            : CrossFadeState.showFirst,
+                        duration: PerformanceConstants.expandAnimationDuration,
+                      ),
                     ),
                   ),
                 ),
@@ -157,13 +162,33 @@ class _PerformanceOverlayState extends State<PerformanceOverlay> {
   }
 
   void _showDetailDialog() {
-    if (_currentMetrics == null) return;
+    if (_currentMetrics == null) {
+      return;
+    }
 
     showDialog<void>(
       context: context,
       builder: (context) => PerformanceDialog(
         metrics: _currentMetrics!,
         tracker: _tracker,
+      ),
+    );
+  }
+
+  void _showChartDialog() {
+    showDialog<void>(
+      context: context,
+      builder: (context) => Dialog(
+        backgroundColor: Colors.transparent,
+        child: Container(
+          constraints: const BoxConstraints(maxWidth: 500, maxHeight: 400),
+          child: const PerformanceChart(
+            height: 300,
+            maxDataPoints: 100,
+            showGrid: true,
+            showReferences: true,
+          ),
+        ),
       ),
     );
   }
@@ -249,18 +274,18 @@ class _PerformanceOverlayState extends State<PerformanceOverlay> {
       children: [
         Icon(icon, color: color, size: 14),
         const SizedBox(width: 4),
-        SizedBox(
-          width: 50,
+        Flexible(
           child: Text(
             label,
             style: widget.textStyle ??
                 TextStyle(
-                  color: Colors.grey[300],
+                  color: Colors.grey.shade300,
                   fontSize: PerformanceConstants.detailedFontSize,
                   fontFamily: 'monospace',
                 ),
           ),
         ),
+        const SizedBox(width: 4),
         Text(
           value,
           style: widget.textStyle ??

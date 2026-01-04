@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import '../core/performance_tracker.dart';
 import '../models/performance_metrics.dart';
@@ -38,12 +39,18 @@ class _PerformanceChartState extends State<PerformanceChart> {
   final PerformanceTracker _tracker = PerformanceTracker();
   final List<double> _fpsData = [];
   PerformanceMetrics? _latestMetrics;
+  StreamSubscription<PerformanceMetrics>? _metricsSubscription;
 
   @override
   void initState() {
     super.initState();
-    _tracker.startTracking(updateInterval: widget.updateInterval);
-    _tracker.metricsStream.listen((metrics) {
+    // Don't start tracking here - use existing tracker if already running
+    // Only start if not already tracking
+    if (!_tracker.isTracking) {
+      _tracker.startTracking(updateInterval: widget.updateInterval);
+    }
+
+    _metricsSubscription = _tracker.metricsStream.listen((metrics) {
       if (mounted) {
         setState(() {
           _latestMetrics = metrics;
@@ -59,7 +66,8 @@ class _PerformanceChartState extends State<PerformanceChart> {
 
   @override
   void dispose() {
-    _tracker.stopTracking();
+    _metricsSubscription?.cancel();
+    // Don't stop tracking here - let the overlay manage it
     super.dispose();
   }
 
@@ -127,8 +135,7 @@ class _PerformanceChartState extends State<PerformanceChart> {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
             decoration: BoxDecoration(
-              color: PerformanceHelpers.getFPSColor(_latestMetrics!.fps)
-                  .withOpacity(0.2),
+              color: PerformanceHelpers.getFPSColor(_latestMetrics!.fps).withOpacity(0.2),
               borderRadius: BorderRadius.circular(4),
               border: Border.all(
                 color: PerformanceHelpers.getFPSColor(_latestMetrics!.fps),
@@ -337,9 +344,7 @@ class _ChartPainter extends CustomPainter {
 
     for (var i = 0; i < data.length; i++) {
       // Handle edge case when data.length == 1
-      final x = data.length == 1
-          ? size.width / 2
-          : (size.width / (data.length - 1)) * i;
+      final x = data.length == 1 ? size.width / 2 : (size.width / (data.length - 1)) * i;
       final fps = data[i].clamp(0.0, maxFPS);
       final y = size.height - (fps / maxFPS * size.height);
 
@@ -389,9 +394,7 @@ class _ChartPainter extends CustomPainter {
       if (i % 3 == 0) {
         // Draw every 3rd point to avoid clutter
         // Handle edge case when data.length == 1
-        final x = data.length == 1
-            ? size.width / 2
-            : (size.width / (data.length - 1)) * i;
+        final x = data.length == 1 ? size.width / 2 : (size.width / (data.length - 1)) * i;
         final fps = data[i].clamp(0.0, maxFPS);
         final y = size.height - (fps / maxFPS * size.height);
         canvas.drawCircle(Offset(x, y), 2, pointPaint);

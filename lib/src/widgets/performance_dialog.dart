@@ -21,7 +21,7 @@ class PerformanceDialog extends StatelessWidget {
     return Dialog(
       backgroundColor: Colors.transparent,
       child: Container(
-        constraints: const BoxConstraints(maxWidth: 400),
+        constraints: const BoxConstraints(maxWidth: 400, maxHeight: 600),
         padding: const EdgeInsets.all(20),
         decoration: BoxDecoration(
           color: Colors.black87,
@@ -34,149 +34,151 @@ class PerformanceDialog extends StatelessWidget {
             ),
           ],
         ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Header
-            Row(
-              children: [
-                Icon(
-                  PerformanceHelpers.getPerformanceIcon(metrics.fps),
-                  color: PerformanceHelpers.getFPSColor(metrics.fps),
-                  size: 32,
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        'Performance Details',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      Text(
-                        PerformanceHelpers.getPerformanceStatus(metrics.fps),
-                        style: TextStyle(
-                          color: PerformanceHelpers.getFPSColor(metrics.fps),
-                          fontSize: 14,
-                        ),
-                      ),
-                    ],
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Header
+              Row(
+                children: [
+                  Icon(
+                    PerformanceHelpers.getPerformanceIcon(metrics.fps),
+                    color: PerformanceHelpers.getFPSColor(metrics.fps),
+                    size: 32,
                   ),
-                ),
-                IconButton(
-                  icon: const Icon(Icons.close, color: Colors.white),
-                  onPressed: () => Navigator.of(context).pop(),
-                ),
-              ],
-            ),
-            const Divider(color: Colors.grey, height: 32),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          'Performance Details',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Text(
+                          PerformanceHelpers.getPerformanceStatus(metrics.fps),
+                          style: TextStyle(
+                            color: PerformanceHelpers.getFPSColor(metrics.fps),
+                            fontSize: 14,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.close, color: Colors.white),
+                    onPressed: () => Navigator.of(context).pop(),
+                  ),
+                ],
+              ),
+              const Divider(color: Colors.grey, height: 32),
 
-            // Metrics
-            _buildMetricCard(
-              'FPS (Frames Per Second)',
-              metrics.fps.toStringAsFixed(2),
-              PerformanceHelpers.getFPSColor(metrics.fps),
-              Icons.speed,
-              subtitle: 'Target: 60 FPS',
-            ),
-            const SizedBox(height: 12),
-            _buildMetricCard(
-              'Frame Time',
-              '${metrics.frameTime.toStringAsFixed(2)} ms',
-              PerformanceHelpers.getFrameTimeColor(metrics.frameTime),
-              Icons.access_time,
-              subtitle: 'Target: ≤16.67 ms',
-            ),
-            const SizedBox(height: 12),
-            _buildMetricCard(
-              'CPU Usage (Estimated)',
-              '${metrics.cpuUsage.toStringAsFixed(1)}%',
-              PerformanceHelpers.getCPUColor(metrics.cpuUsage),
-              Icons.memory,
-            ),
-            if (metrics.memoryUsage > 0) ...[
+              // Metrics
+              _buildMetricCard(
+                'FPS (Frames Per Second)',
+                metrics.fps.toStringAsFixed(2),
+                PerformanceHelpers.getFPSColor(metrics.fps),
+                Icons.speed,
+                subtitle: 'Target: 60 FPS',
+              ),
               const SizedBox(height: 12),
               _buildMetricCard(
-                'Memory Usage',
-                '${metrics.memoryUsage.toStringAsFixed(1)} MB',
-                PerformanceHelpers.getMemoryColor(metrics.memoryUsage),
-                Icons.storage,
+                'Frame Time',
+                '${metrics.frameTime.toStringAsFixed(2)} ms',
+                PerformanceHelpers.getFrameTimeColor(metrics.frameTime),
+                Icons.access_time,
+                subtitle: 'Target: ≤16.67 ms',
               ),
-            ],
-
-            const Divider(color: Colors.grey, height: 32),
-
-            // Statistics
-            const Text(
-              'Statistics',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
+              const SizedBox(height: 12),
+              _buildMetricCard(
+                'CPU Usage (Estimated)',
+                '${metrics.cpuUsage.toStringAsFixed(1)}%',
+                PerformanceHelpers.getCPUColor(metrics.cpuUsage),
+                Icons.memory,
               ),
-            ),
-            const SizedBox(height: 12),
-            _buildStatRow('Total Frames', '${metrics.frameCount}'),
-            if (metrics.minFps != null)
-              _buildStatRow('Minimum FPS', metrics.minFps!.toStringAsFixed(1)),
-            if (metrics.maxFps != null)
-              _buildStatRow('Maximum FPS', metrics.maxFps!.toStringAsFixed(1)),
-            if (metrics.avgFps != null)
-              _buildStatRow('Average FPS', metrics.avgFps!.toStringAsFixed(1)),
-            if (duration != null)
-              _buildStatRow(
-                'Tracking Duration',
-                PerformanceHelpers.formatDuration(duration),
-              ),
-
-            const SizedBox(height: 20),
-
-            // Actions
-            Row(
-              children: [
-                Expanded(
-                  child: OutlinedButton.icon(
-                    onPressed: () {
-                      _copyToClipboard(context);
-                    },
-                    icon: const Icon(Icons.copy, size: 18),
-                    label: const Text('Copy Data'),
-                    style: OutlinedButton.styleFrom(
-                      foregroundColor: Colors.white,
-                      side: const BorderSide(color: Colors.grey),
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: ElevatedButton.icon(
-                    onPressed: () {
-                      tracker.resetStatistics();
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('Statistics reset'),
-                          duration: Duration(seconds: 2),
-                        ),
-                      );
-                      Navigator.of(context).pop();
-                    },
-                    icon: const Icon(Icons.refresh, size: 18),
-                    label: const Text('Reset'),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.blue,
-                      foregroundColor: Colors.white,
-                    ),
-                  ),
+              if (metrics.memoryUsage > 0) ...[
+                const SizedBox(height: 12),
+                _buildMetricCard(
+                  'Memory Usage',
+                  '${metrics.memoryUsage.toStringAsFixed(1)} MB',
+                  PerformanceHelpers.getMemoryColor(metrics.memoryUsage),
+                  Icons.storage,
                 ),
               ],
-            ),
-          ],
+
+              const Divider(color: Colors.grey, height: 32),
+
+              // Statistics
+              const Text(
+                'Statistics',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 12),
+              _buildStatRow('Total Frames', '${metrics.frameCount}'),
+              if (metrics.minFps != null)
+                _buildStatRow('Minimum FPS', metrics.minFps!.toStringAsFixed(1)),
+              if (metrics.maxFps != null)
+                _buildStatRow('Maximum FPS', metrics.maxFps!.toStringAsFixed(1)),
+              if (metrics.avgFps != null)
+                _buildStatRow('Average FPS', metrics.avgFps!.toStringAsFixed(1)),
+              if (duration != null)
+                _buildStatRow(
+                  'Tracking Duration',
+                  PerformanceHelpers.formatDuration(duration),
+                ),
+
+              const SizedBox(height: 20),
+
+              // Actions
+              Row(
+                children: [
+                  Expanded(
+                    child: OutlinedButton.icon(
+                      onPressed: () {
+                        _copyToClipboard(context);
+                      },
+                      icon: const Icon(Icons.copy, size: 18),
+                      label: const Text('Copy Data'),
+                      style: OutlinedButton.styleFrom(
+                        foregroundColor: Colors.white,
+                        side: const BorderSide(color: Colors.grey),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: ElevatedButton.icon(
+                      onPressed: () {
+                        tracker.resetStatistics();
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Statistics reset'),
+                            duration: Duration(seconds: 2),
+                          ),
+                        );
+                        Navigator.of(context).pop();
+                      },
+                      icon: const Icon(Icons.refresh, size: 18),
+                      label: const Text('Reset'),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.blue,
+                        foregroundColor: Colors.white,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -217,7 +219,7 @@ class PerformanceDialog extends StatelessWidget {
                 Text(
                   title,
                   style: TextStyle(
-                    color: Colors.grey[400],
+                    color: Colors.grey.shade400,
                     fontSize: 12,
                   ),
                 ),
@@ -236,7 +238,7 @@ class PerformanceDialog extends StatelessWidget {
                   Text(
                     subtitle,
                     style: TextStyle(
-                      color: Colors.grey[600],
+                      color: Colors.grey.shade600,
                       fontSize: 10,
                     ),
                   ),
@@ -258,7 +260,7 @@ class PerformanceDialog extends StatelessWidget {
           Text(
             label,
             style: TextStyle(
-              color: Colors.grey[400],
+              color: Colors.grey.shade400,
               fontSize: 13,
             ),
           ),

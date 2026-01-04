@@ -15,9 +15,9 @@ class PerformanceConstants {
   static const double poorFrameTime = 50.0; // 20 FPS
 
   // Update intervals
-  static const Duration defaultUpdateInterval = Duration(milliseconds: 500);
-  static const Duration fastUpdateInterval = Duration(milliseconds: 250);
-  static const Duration slowUpdateInterval = Duration(seconds: 1);
+  static const Duration defaultUpdateInterval = Duration(seconds: 1);
+  static const Duration fastUpdateInterval = Duration(milliseconds: 500);
+  static const Duration slowUpdateInterval = Duration(seconds: 2);
 
   // Data retention
   static const int maxHistoryDataPoints = 120; // 2 minutes at 1 sample/second
